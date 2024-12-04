@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Donor Home</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+     integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+     
+     
+    
+    <style>
+        .navbar{
+            
+            height: 80px;
+            margin: 20px;
+            border-radius: 16px;
+            padding: 0.5rem;
+        }
+        .navbar-brand{
+            font-weight: 500;
+            color: #009970;
+            font-size: 24px;
+            transition: 0.3s color;
+        }
+        .logout-button{
+            background-color: #009970;
+            color: #fff;
+            font-size: 14px;
+            padding: 8px 20px;
+            border-radius: 50px;
+            text-decoration: none;
+            transition: 0.3s background-color;
+        }
+        .logout-button:hover{
+            background-color: #00b383;
+        }
+        
+        .navbar-toggler{
+            border: none;
+            font-size: 1.25rem;
+
+        }
+        .navbar-toggler:focus, .btn-close:focus{
+            box-shadow: none;
+            outline: none;
+        }
+        .nav-link{
+            color:#009970;
+            font-weight: 500;
+            position: relative;
+        }
+        .nav-link:hover, .nav-link.active{
+            color: #fff;
+        }
+        @media (min-width:991px){
+            .nav-link::before{
+                content: "";
+                position: absolute;
+                bottom: 0;
+                left: 50%;
+                transform: translateX(-50%);
+                width: 0;
+                height: 2px;
+                background-color: #009970;
+                visibility: hidden;
+                transition: 0.3s ease-in-out;
+
+            }
+            .nav-link:hover::before, .nav-link.active::before{
+                width: 100%;
+                visibility: visible;
+            }
+        }
+        .paw-badge::after {
+            content: "\1F43E"; /* Unicode character for paw */
+            margin-left: 4px;
+        }
+        .card-img-top {
+            height: 200px; /* Set a fixed height for the card images */
+            object-fit: cover; /* Ensure images cover the entire area */
+        }
+        .card{
+            margin-top: 100px;
+        }
+        .navbar-toggler-icon{
+          background-color: #009970;
+        }
+        .no-pets-text {
+            font-size: 56px; /* Adjust font size as needed */
+            color: green;
+            text-align: center;
+            margin-top: 150px; 
+        }
+        
+
+       
+        
+    </style>
+</head>
+
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg fixed-top bg-dark ">
+        <div class="container">
+          <a class="navbar-brand" href="#">PAWS & PLAY</a>
+          <button class="navbar-toggler pe-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
+            <div class="offcanvas-header">
+              <h5 class="offcanvas-title" id="offcanvasNavbarLabel">PAWS & PLAY</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            </div>
+            <div class="offcanvas-body">
+              <ul class="navbar-nav justify-content-center flex-grow-1 pe-3">
+                <li class="nav-item">
+                  <a class="nav-link mx-lg-2 " aria-current="page" href="{% url 'adoptor_home' %}">Home</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link mx-lg-2" href="{% url 'view_approved' %}">Pets</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link mx-lg-2" href="{% url 'u_password' %}">Create Password</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link mx-lg-2" href="{% url 'user_profile_view' %}">Profile</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link mx-lg-2" href="{% url 'view_adopted_pets' %}">Adopted Pets</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link mx-lg-2" href="{% url 'user_notification' %}">Notifications<span class="badge badge-primary badge-pill">{{ count }}</span></a>
+                  </li>
+                
+                  </ul>
+                <a href="{% url 'login' %}" class="logout-button">Logout</a>
+              
+            </div>
+          </div>
+        </div>
+      </nav>
+
+      <!---Section Hero-->
+      
+      <div class="container mt-4">
+        <div class="row">
+            {% if approved_pets %}
+                {% for pet in approved_pets %}
+                    <div class="col-md-4 mb-4">
+                        <div class="card shadow-lg">
+                            <img class="card-img-top" src="{{ pet.pet_image.url }}" alt="{{ pet.pet_name }}">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ pet.pet_name }}</h5>
+                                <a role="button" class="btn btn-outline-success" href="{% url 'pet_details' pet.id %}">Details<span class="paw-badge"></span></a>
+                                <a role="button" class="btn btn-outline-success" href="{% url 'adopt_details' pet.id %}">Adopt<span class="paw-badge"></span></a>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <div class="col">
+                    <p class="no-pets-text">No pets available....!</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+      
+      
+    
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" 
+    crossorigin="anonymous"></script>
+</body>
+
+</html>
+
